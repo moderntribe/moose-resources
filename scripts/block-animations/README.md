@@ -1,4 +1,4 @@
-# Component Name
+# Block Animations
 
 Status: Alpha
 Version: 0.1-alpha
