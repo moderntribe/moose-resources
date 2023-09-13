@@ -15,6 +15,7 @@ The block animations script is used to add developer defined animations to block
 
 `block-animations.js` => `themes/core/assets/js/editor`
 `animate-on-scroll.js` => `themes/core/assets/js/theme`
+`animation.pcss` => `themes/core/assets/pcss/global`
 
 ### `theme.json` Settings
 
@@ -101,6 +102,8 @@ An additional script that pairs as the front-end handler for the block animation
 The block animation script defines an additional class on blocks with animation for the "style" of animation (`tribe-animation-style-{style}`), which uses the `slug` property of the `animation` array's object.
 
 The block animation script defines three style properties on block with animation for the animation speed (`--tribe-animation-speed`), delay (`--tribe-animation-delay`), and easing (`--tribe-animation-easing`). You should be able to use these CSS custom properties within your animation styles to modify the default animation values.
+
+In this directory, there's a `animation.pcss` style file also included. This can be used as base for creating animations using these scripts.
 
 ## Media
 
