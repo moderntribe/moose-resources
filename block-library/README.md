@@ -11,4 +11,4 @@ A collection of custom blocks.
 
 ## Block Collection
 
-- [Block Name](./link-to-block-directory/README.md)
+- [Slider](./slider/README.md)
