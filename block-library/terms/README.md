@@ -17,11 +17,7 @@ The block can be added to anywhere we would have access to a post object. Post s
 
 ### Moose Implementation
 
-1. Copy `block/` directory to the `themes/core/blocks/tribe/` directory.
-1. Copy `Terms_Block.php` to the `plugins/core/src/Blocks/` directory.
-1. Add the `tribe/terms` block to the `self::TYPES` array in `plugins/core/src/Blocks/Blocks_Definer.php`.
-1. Run `npm run dist` to build the block.
-1. For the purpose of reusability, all styles for the block have been included in the block. It may make sense to break these styles out into mixins if you need them in a global context.
+The Terms block is already included in base Moose. There is no requirement to move any of the files to Moose to implement this block. This directory should serve as documentation for the Terms block.
 
 ### Attributes
 
