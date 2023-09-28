@@ -9,7 +9,7 @@
  * Terms Block
  * ----------------------------------------------------------------------- */
 
-.wp-block-tribe-terms {
+ .wp-block-tribe-terms {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
@@ -42,49 +42,9 @@
 
 .wp-block-tribe-terms__link {
 
-	/* this is already a mixin in Moose */
-	@mixin t-category;
-	color: var(--color-black);
-
-	/* target links for the hover/focus effect */
-	&:is(a) {
-
-		&:hover,
-		&:focus {
-			color: var(--color-black);
-			text-decoration: underline;
-		}
-	}
-
-	/** 
-	 * style pills differently 
-	 * it may make sense to move these styles into a mixin once merged
-	 * into Moose so the pill style can be used elsewhere
-	 */
+	/* style pills differently */
 	.is-style-pills & {
-		display: inline-flex;
-		padding: 4px 16px;
-		align-items: center;
-		background-color: var(--color-neutral-20);
-		border-radius: 100px;
-		color: var(--color-black);
-		text-decoration: none;
-		transition: var(--transition);
 
-		font-family: var(--wp--preset--font-family--roboto);
-		font-size: var(--wp--preset--font-size--10);
-		line-height: 1.6;
-		font-weight: 700;
-
-		/* target links for the hover/focus effect */
-		&:is(a) {
-
-			&:hover,
-			&:focus {
-				background-color: var(--color-black);
-				color: var(--color-white);
-				text-decoration: none;
-			}
-		}
+		@mixin t-tag;
 	}
 }

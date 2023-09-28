@@ -1,7 +1,7 @@
 # Terms Block
 
 Status: Alpha
-Version: 0.1-alpha
+Version: 1.0-beta
 Last Updated: 2023-09
 Component Created By: Geoff Dusome
 
