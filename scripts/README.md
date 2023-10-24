@@ -11,4 +11,4 @@ A collection of block editor level scripts (global, not tied to a block).
 
 ## Script Collection
 
-- [Script Name](./link-to-script-directory/README.md)
+- [Block Animations](./block-animations/README.md)
