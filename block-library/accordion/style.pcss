@@ -1,0 +1,26 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-tribe-accordion {
+
+	/**
+	 * CASE: Stacked Layout
+	 */
+	&.is-layout-stacked {
+
+		.wp-block-columns {
+			flex-wrap: wrap !important;
+		}
+
+		.wp-block-column {
+
+			@media (--mq-wp-medium) {
+				flex-basis: 100% !important;
+			}
+		}
+	}
+}
