@@ -281,14 +281,16 @@ const CustomQueryLoopEdit = ( {
 
 		if ( postTypes !== null && postTypes.length > 0 ) {
 			for ( let i = 0; i < postTypes.length; i++ ) {
-				for (
-					let j = 0;
-					j < postInPosts[ postTypes[ i ].slug ].length;
-					j++
-				) {
-					suggestions.push(
-						postInPosts[ postTypes[ i ].slug ][ j ].title.rendered
-					);
+				if ( postInPosts[ postTypes[ i ].slug ] !== null ) {
+					for (
+						let j = 0;
+						j < postInPosts[ postTypes[ i ].slug ].length;
+						j++
+					) {
+						suggestions.push(
+							postInPosts[ postTypes[ i ].slug ][ j ].title.rendered
+						);
+					}
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 # Custom Query Loop
 
 Status: Alpha
-Version: 0.1-alpha
+Version: 0.2-alpha
 Last Updated: 2024-05
 Component Created By: Geoff Dusome
 
