@@ -12,3 +12,4 @@ A collection of custom blocks.
 ## Block Collection
 
 - [Terms](./terms/README.md)
+- [Custom Query Loop](./custom-query-loop/README.md)
