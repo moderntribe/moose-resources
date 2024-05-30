@@ -288,7 +288,8 @@ const CustomQueryLoopEdit = ( {
 						j++
 					) {
 						suggestions.push(
-							postInPosts[ postTypes[ i ].slug ][ j ].title.rendered
+							postInPosts[ postTypes[ i ].slug ][ j ].title
+								.rendered
 						);
 					}
 				}

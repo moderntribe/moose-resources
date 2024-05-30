@@ -20,8 +20,8 @@ $primary_term = $post->get_primary_term( $id, 'category' );
 			</div>
 		<?php endif; ?>
 
-		<h2 class="p-card-post__title t-display-xx-small" style="margin-top: 0; margin-bottom: var(--wp--preset--spacing--10)"><?php echo get_the_title( $id ); ?></h2>
+		<h2 class="p-card-post__title t-display-xx-small" style="margin-top: 0; margin-bottom: var(--wp--preset--spacing--10)"><?php echo esc_html( get_the_title( $id ) ); ?></h2>
 
-		<a href="<?php echo get_the_permalink( $id ); ?>" class="p-card-post__link a-link-cover" target="_self"><?php echo esc_html__( 'Read More', 'tribe' ); ?></a>
+		<a href="<?php echo esc_url( get_the_permalink( $id ) ); ?>" class="p-card-post__link a-link-cover" target="_self"><?php echo esc_html__( 'Read More', 'tribe' ); ?></a>
 	</div>
 </article>
