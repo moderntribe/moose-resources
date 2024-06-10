@@ -1,0 +1,27 @@
+/* -------------------------------------------------------------------------
+ *
+ * Block - Color Theme - Styles - FE / Editor
+ *
+ * ------------------------------------------------------------------------- */
+
+.wp-block-tribe-color-theme {
+
+	/* set variables */
+	--theme-text-color: var(--color-black);
+	--theme-background-color: var(--color-white);
+	--theme-accent-color: var(--color-royal-blue);
+
+	/* apply variables */
+	background-color: var(--theme-background-color);
+	color: var(--theme-text-color);
+
+	.color-theme-accent-color {
+		color: var(--theme-accent-color) !important;
+	}
+
+	&.is-style-dark {
+		--theme-text-color: var(--color-white);
+		--theme-background-color: var(--color-black);
+		--theme-accent-color: var(--color-neutral-10);
+	}
+}

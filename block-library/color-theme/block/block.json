@@ -1,0 +1,38 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "tribe/color-theme",
+	"version": "0.1.0",
+	"title": "Color Theme",
+	"category": "theme",
+	"icon": "admin-appearance",
+	"description": "A Group block replacement for applying color themes",
+	"styles": [
+		{
+			"name": "default",
+			"label": "Default",
+			"isDefault": true
+		},
+		{
+			"name": "dark",
+			"label": "Dark"
+		}
+	],
+	"supports": {
+		"html": false,
+		"alignCustom": [
+			"wide",
+			"grid",
+			"full"
+		],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"layout": true
+	},
+	"textdomain": "tribe",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
