@@ -1,4 +1,4 @@
-# Terms Block
+# Color Theme Block
 
 Status: Alpha
 Version: 0.1-alpha
