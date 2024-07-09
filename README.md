@@ -16,6 +16,6 @@ A collection of block editor level scripts (global, not tied to a block).
 
 ## Filters
 
-[filters/README.md]('./filters/README.md)
+[filters/README.md](./filters/README.md)
 
 A collection of block filters that override front end markup for a block.
