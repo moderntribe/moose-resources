@@ -5,6 +5,12 @@ Version: 0.1-alpha
 Last Updated: 2024-07
 Component Created By: Geoff
 
+## TODOS
+
+- [ ] Support multiple post types with a different image placeholder for each post types.
+- [ ] Allow ability to globally set placeholder image(s) via custom meta field. 
+- [ ] Support ability for multiple placeholder images set to randomly show one out of an array.
+
 ## What does this component do?
 
 This filter targets the post featured image block in order to add a placeholder image if the featured image isn't set. Note that filters only work on the front-end of the website.
