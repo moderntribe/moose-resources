@@ -20,10 +20,16 @@ Both the editor view and FE view have been created fairly opinionated but both a
 - Tabs can be reordered ONLY via the block list view at this time. We were not able to come up with a solution where we can click & drag to reorder the tabs within the block.
 - Tab content can be entered by clicking each tab title and adding blocks to the tab content for that tab.
 
+### Dependencies
+
+The tabs block has a FE dependency on the `delegate` library (https://www.npmjs.com/package/delegate).
+
 ### Moose Implementation
 
 Very simple implementation:
 
-1. Copy contents of `blocks` directory to the `themes/core/blocks/tribe` directory. 
+1. Add `delegate` as a project dependency in your `package.json` file
+1. Run `npm install` to install the dependency 
+2. Copy contents of `blocks` directory to the `themes/core/blocks/tribe` directory. 
 2. Add the `tribe/tabs` and `tribe/tab` blocks to the `TYPES` array in the `plugins/core/src/Blocks/Blocks_Definer.php` file.
 3. Build the blocks using `npm run dist`.
