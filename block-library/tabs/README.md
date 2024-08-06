@@ -28,8 +28,7 @@ The tabs block has a FE dependency on the `delegate` library (https://www.npmjs.
 
 Very simple implementation:
 
-1. Add `delegate` as a project dependency in your `package.json` file
-1. Run `npm install` to install the dependency 
+1. Run `npm i delegate` to add the required dependency. 
 2. Copy contents of `blocks` directory to the `themes/core/blocks/tribe` directory. 
 2. Add the `tribe/tabs` and `tribe/tab` blocks to the `TYPES` array in the `plugins/core/src/Blocks/Blocks_Definer.php` file.
 3. Build the blocks using `npm run dist`.
