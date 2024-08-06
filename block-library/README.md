@@ -13,3 +13,4 @@ A collection of custom blocks.
 
 - [Terms](./terms/README.md)
 - [Color Theme](./color-theme/README.md)
+- [Tabs](./tabs/README.md)
