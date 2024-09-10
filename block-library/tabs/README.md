@@ -5,6 +5,11 @@ Version: 0.1-alpha
 Last Updated: 2024-07
 Component Created By: Geoff Dusome
 
+## TODOS
+
+- [ ] Remove `delegate` dependency from the `view.js` script in the `tabs` block.
+- [ ] Explore block optimizations and alternative implementations
+
 ## What does this component do?
 
 The Tabs block is a set of two blocks used in a parent/child relationship. The Tabs block is the container and main driver of the block. The Tabs block contains all of the editor functionality and styling. The Tab block is the holder of the tab content and acts as an InnerBlocks wrapper.

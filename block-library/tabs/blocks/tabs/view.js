@@ -1,9 +1,7 @@
 import delegate from 'delegate';
 
-import { ready } from 'utils/events.js';
-
 const el = {
-	tabBlocks: null,
+	tabBlocks: document.querySelectorAll( '[data-js="tabs-block"]' ),
 };
 
 /**
@@ -150,23 +148,13 @@ const bindEvents = () => {
 };
 
 /**
- * @function cacheElements
- *
- * @description save elements for later use
- */
-const cacheElements = () => {
-	el.tabBlocks = document.querySelectorAll( '[data-js="tabs-block"]' );
-};
-
-/**
  * @function init
  *
  * @description kick off the functionality
  */
 const init = () => {
-	cacheElements();
 	bindEvents();
 	initializeTabBlocks();
 };
 
-ready( init );
+init();

@@ -23,7 +23,24 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const innerBlocks = select.getBlocks( clientId );
 	const { currentActiveTabInstanceId, tabs } = attributes;
 
-	// Update the current active tab to the client Id of the first tab
+	/**
+	 * setup inner block props and add classname to wrapper
+	 */
+	const innerBlocksProps = useInnerBlocksProps(
+		{
+			className: 'wp-block-tribe-tabs__tab-content',
+		},
+		{
+			allowedBlocks: [ 'tribe/tab' ],
+			template: [ [ 'tribe/tab' ] ],
+			renderAppender: false,
+		}
+	);
+
+	/**
+	 * Update the current active tab to the client Id of the first tab
+	 * This will only run once when the block is first added to the editor
+	 */
 	useEffect( () => {
 		if ( innerBlocks.length === 0 || currentActiveTabInstanceId !== '' ) {
 			return;
@@ -33,6 +50,25 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			currentActiveTabInstanceId: innerBlocks[ 0 ].attributes.blockId,
 		} );
 	}, [ innerBlocks, setAttributes, currentActiveTabInstanceId ] );
+
+	/**
+	 * set new tab state when innerBlocks or currentActiveTabInstanceId changes
+	 */
+	useEffect( () => {
+		const data = innerBlocks.map( ( tab ) => {
+			return {
+				clientId: tab.clientId,
+				id: tab.attributes.blockId,
+				buttonId: 'button-' + tab.attributes.blockId,
+				label: tab.attributes.tabLabel,
+				isActive: currentActiveTabInstanceId === tab.attributes.blockId,
+			};
+		} );
+
+		setAttributes( {
+			tabs: data,
+		} );
+	}, [ innerBlocks, currentActiveTabInstanceId, setAttributes ] );
 
 	/**
 	 * @function updateTabLabel
@@ -111,35 +147,6 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			currentActiveTabInstanceId: newActiveTabInstanceId,
 		} );
 	};
-
-	// setup inner block props and add classname to wrapper
-	const innerBlocksProps = useInnerBlocksProps(
-		{
-			className: 'wp-block-tribe-tabs__tab-content',
-		},
-		{
-			allowedBlocks: [ 'tribe/tab' ],
-			template: [ [ 'tribe/tab' ] ],
-			renderAppender: false,
-		}
-	);
-
-	// set new tab state when innerBlocks or currentActiveTabInstanceId changes
-	useEffect( () => {
-		const data = innerBlocks.map( ( tab ) => {
-			return {
-				clientId: tab.clientId,
-				id: tab.attributes.blockId,
-				buttonId: 'button-' + tab.attributes.blockId,
-				label: tab.attributes.tabLabel,
-				isActive: currentActiveTabInstanceId === tab.attributes.blockId,
-			};
-		} );
-
-		setAttributes( {
-			tabs: data,
-		} );
-	}, [ innerBlocks, currentActiveTabInstanceId, setAttributes ] );
 
 	return (
 		<div { ...blockProps }>
