@@ -22,6 +22,7 @@ This plugin allows us to import any Post Type data from one WordPress site to an
 ## Installation
 
 - Copy the plugin to the `wp-content/plugins` directory of your WordPress installation.
+- Run `composer install` in the plugin directory.
 - Activate the plugin through the WordPress admin interface.
 - Add the following to your environment file:
   ```php
