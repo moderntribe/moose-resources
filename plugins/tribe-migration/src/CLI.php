@@ -90,8 +90,7 @@ class CLI {
 		}
 
 		// send to Action Scheduler for processing
-		as_schedule_single_action(
-			time(),
+        as_enqueue_async_action(
 			Fetch_External_Records::HOOK,
 			$params,
 			'migration'
