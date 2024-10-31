@@ -13,7 +13,7 @@ This is a set of blocks that includes a parent/child relationship between a "Car
 
 ### Moose Implementation
 
-1. Add `swiper` as a dependency in your project
+1. Add `swiper` as a dependency in your project. This block was built on major version 11. 
 1. Run `npm install` to install the dependency
 1. Copy directory to the `themes/core/blocks/tribe/` directory.
 1. Add the `tribe/carousel` and `tribe/carousel-slide` blocks to the `self::TYPES` array in `plugins/core/src/Blocks/Blocks_Definer.php`.
