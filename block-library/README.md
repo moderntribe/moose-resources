@@ -11,6 +11,7 @@ A collection of custom blocks.
 
 ## Block Collection
 
-- [Terms](./terms/README.md)
+- [Carousel](./carousel/README.md)
 - [Color Theme](./color-theme/README.md)
 - [Tabs](./tabs/README.md)
+- [Terms](./terms/README.md)
