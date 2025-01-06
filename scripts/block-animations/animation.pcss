@@ -10,94 +10,203 @@
 /* Setup default animation variables so they can be overridden per block */
 :root {
 	--tribe-animation-delay: 0s;
-	--tribe-animation-speed: 0.3s;
-	--tribe-animation-easing: ease;
+	--tribe-animation-speed: 0.6s;
+	--tribe-animation-easing: cubic-bezier(0.39, 0.575, 0.565, 1);
+	--tribe-animation-offset: 50px;
 }
 
 /* -------------------------------------------------------------------------
  * Animated Element / Block
+ *
  * We set opacity to 0 here because all of our animations involve fades
  * Also set the default transition for the block, if the "Animation should
  * trigger every time the element is in the viewport" setting is checked,
  * this transition will handle in & out animations.
  * ------------------------------------------------------------------------- */
 
-.is-animated-on-scroll,
-.is-animated-on-scroll-full {
-	opacity: 0;
-	transition: opacity var(--tribe-animation-speed) var(--tribe-animation-delay) var(--tribe-animation-easing);
+.tribe-animation-type-fade-in {
 
-	/* -------------------------------------------------------------------------
-	 * Fade In
-	 * Don't run "first time" animation if multiple is set
-	 * ------------------------------------------------------------------------- */
+	/* Only run animations if the users has no preference on reduced motion */
+	@media (prefers-reduced-motion: no-preference) {
+		opacity: 0;
+		transition: opacity var(--tribe-animation-speed) var(--tribe-animation-delay) var(--tribe-animation-easing);
 
-	&.tribe-animation-style-fade-in.is-scrolled-into-view,
-	&:not(.tribe-animate-multiple).tribe-animation-style-fade-in.is-scrolled-into-view-first-time {
-		opacity: 1;
-	}
+		/* turn off delay for mobile if setting is set */
+		@media (--mq-wp-mobile-max) {
 
-	/* -------------------------------------------------------------------------
-	 * Fade In Up
-	 * Don't run "first time" animation if multiple is set
-	 * ------------------------------------------------------------------------- */
-
-	&.tribe-animation-style-fade-in-up {
-		transition-property: all;
-		transform: translateY(25%);
-
-		&.is-scrolled-into-view,
-		&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
-			opacity: 1;
-			transform: translateY(0);
+			&.tribe-animation-mobile-disable-delay {
+				transition-delay: 0s !important;
+			}
 		}
-	}
 
-	/* -------------------------------------------------------------------------
-	 * Fade In Down
-	 * Don't run "first time" animation if multiple is set
-	 * ------------------------------------------------------------------------- */
+		/* -------------------------------------------------------------------------
+		* Fade In (Simple)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
 
-	&.tribe-animation-style-fade-in-down {
-		transition-property: all;
-		transform: translateY(-25%);
-
-		&.is-scrolled-into-view,
-		&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+		&.tribe-animation-direction-simple.is-scrolled-into-view,
+		&:not(.tribe-animate-multiple).tribe-animation-direction-simple.is-scrolled-into-view-first-time {
 			opacity: 1;
-			transform: translateY(0);
 		}
-	}
 
-	/* -------------------------------------------------------------------------
-	 * Fade In Right
-	 * Don't run "first time" animation if multiple is set
-	 * ------------------------------------------------------------------------- */
+		/* -------------------------------------------------------------------------
+		* Fade In Up (Bottom)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
 
-	&.tribe-animation-style-fade-in-right {
-		transition-property: all;
-		transform: translateX(-25%);
+		&.tribe-animation-direction-bottom {
+			transition-property: all;
+			transform: translateY(var(--tribe-animation-offset));
 
-		&.is-scrolled-into-view,
-		&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
-			opacity: 1;
-			transform: translateX(0);
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
-	}
 
-	/* -------------------------------------------------------------------------
-	 * Fade In Left
-	 * Don't run "first time" animation if multiple is set
-	 * ------------------------------------------------------------------------- */
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Bottom Left (Bottom Left)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
 
-	&.tribe-animation-style-fade-in-left {
-		transition-property: all;
-		transform: translateX(25%);
+		&.tribe-animation-direction-bottom-left {
+			transition-property: all;
+			transform: translate(calc(var(--tribe-animation-offset) * -1), var(--tribe-animation-offset));
 
-		&.is-scrolled-into-view,
-		&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
-			opacity: 1;
-			transform: translateX(0);
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translate(0, 0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Bottom Right (Bottom Right)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-bottom-right {
+			transition-property: all;
+			transform: translate(var(--tribe-animation-offset), var(--tribe-animation-offset));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translate(0, 0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In Down (Top)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-top {
+			transition-property: all;
+			transform: translateY(calc(var(--tribe-animation-offset) * -1));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Top Right (Top Right)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-top-right {
+			transition-property: all;
+			transform: translate(var(--tribe-animation-offset), calc(var(--tribe-animation-offset) * -1));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translate(0, 0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Top Left (Top Left)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-top-left {
+			transition-property: all;
+			transform: translate(calc(var(--tribe-animation-offset) * -1), calc(var(--tribe-animation-offset) * -1));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translate(0, 0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Right (Left)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-left {
+			transition-property: all;
+			transform: translateX(calc(var(--tribe-animation-offset) * -1));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In (from the) Left (Right)
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-right {
+			transition-property: all;
+			transform: translateX(var(--tribe-animation-offset));
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In Forward
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-forward {
+			transition-property: all;
+			transform: scale(0.85);
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		/* -------------------------------------------------------------------------
+		* Fade In Backward
+		* Don't run "first time" animation if multiple is set
+		* ------------------------------------------------------------------------- */
+
+		&.tribe-animation-direction-back {
+			transition-property: all;
+			transform: scale(1.15);
+
+			&.is-scrolled-into-view,
+			&:not(.tribe-animate-multiple).is-scrolled-into-view-first-time {
+				opacity: 1;
+				transform: scale(1);
+			}
 		}
 	}
 }

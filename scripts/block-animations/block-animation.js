@@ -4,21 +4,36 @@
  * @description handles setting up animation settings for blocks
  *
  * theme.json settings:
- * "animation": [
- * 		{ "label": "Test", "value": "test" },
- * 		{ "label": "Test 2", "value": "test-2" }
+ * "animationType": [
+ * 		{ "label": "None", "value": "none" },
+ * 		{ "label": "Fade In", "value": "fade-in" }
  * ],
- * "animationSpeeds": [
- * 		{ "label": "Fast", "value": "0.2s" },
- * 		{ "label": "Slow", "value": "0.8s" }
+ * "animationDirection": {
+ * 		"fade-in": [
+ * 			{ "label": "Top", "value": "top" },
+ * 			{ "label": "Bottom", "value": "bottom" }
+ * 		]
+ * },
+ * "animationDuration": [
+ * 		{ "label": "200ms", "value": "0.2s" },
+ * 		{ "label": "800ms", "value": "0.8s" }
  * ],
- * "animationDelays": [
- * 		{ "label": "Short", "value": "0.2s" },
- * 		{ "label": "Long", "value": "0.8s" }
+ * "offsetDistance": {
+ * 		"0.2s": "20px",
+ * 		"0.8s": "50px"
+ * },
+ * "animationDelay": [
+ * 		{ "label": "0", "value": "0s" },
+ * 		{ "label": "200ms", "value": "0.2s" },
+ * 		{ "label": "800ms", "value": "0.8s" }
  * ],
- * "animationEasings": [
+ * "animationEasing": [
  * 		{ "label": "Ease In", "value": "ease-in" },
  * 		{ "label": "Ease Out", "value": "ease-out" }
+ * ],
+ * "animationPosition": [
+ * 		{ "label": "25%", "value": "25" },
+ * 		{ "label": "50%", "value": "50" },
  * ],
  * "animationIncludes": [
  * 		"core/group",
@@ -66,27 +81,34 @@ const applyAnimationProps = ( props, block, attributes ) => {
 	}
 
 	const {
-		animationStyle,
-		animationSpeed,
+		animationType,
+		animationDirection,
+		animationDuration,
 		animationDelay,
+		animationMobileDisableDelay,
 		animationEasing,
 		animationTrigger,
 		animationPosition,
 	} = attributes;
 
-	if ( animationStyle === undefined || animationStyle === 'none' ) {
+	if ( animationType === undefined || animationType === 'none' ) {
 		return props;
 	}
 
-	props.className =
-		animationPosition !== undefined && animationPosition
-			? `${ props.className } tribe-animation-style-${ animationStyle } is-animated-on-scroll-full`
-			: `${ props.className } tribe-animation-style-${ animationStyle } is-animated-on-scroll`;
+	if ( props.className === undefined ) {
+		props.className = '';
+	}
 
-	if ( animationSpeed !== undefined && animationSpeed ) {
+	props.className = `${
+		props.className !== '' ? props.className + ' ' : ''
+	} is-animated-on-scroll-${ animationPosition } tribe-animation-type-${ animationType } tribe-animation-direction-${ animationDirection }`;
+
+	if ( animationDuration !== undefined && animationDuration ) {
 		props.style = {
 			...props.style,
-			'--tribe-animation-speed': animationSpeed,
+			'--tribe-animation-speed': animationDuration,
+			'--tribe-animation-offset':
+				state.offsetDistance[ animationDuration ],
 		};
 	}
 
@@ -95,6 +117,13 @@ const applyAnimationProps = ( props, block, attributes ) => {
 			...props.style,
 			'--tribe-animation-delay': animationDelay,
 		};
+	}
+
+	if (
+		animationMobileDisableDelay !== undefined &&
+		animationMobileDisableDelay
+	) {
+		props.className = `${ props.className } tribe-animation-mobile-disable-delay`;
 	}
 
 	if ( animationEasing !== undefined && animationEasing ) {
@@ -131,9 +160,11 @@ const animationControls = createHigherOrderComponent( ( BlockEdit ) => {
 		}
 
 		const {
-			animationStyle,
-			animationSpeed,
+			animationType,
+			animationDirection,
+			animationDuration,
 			animationDelay,
+			animationMobileDisableDelay,
 			animationEasing,
 			animationTrigger,
 			animationPosition,
@@ -143,24 +174,39 @@ const animationControls = createHigherOrderComponent( ( BlockEdit ) => {
 			attributes.className !== undefined ? attributes.className : '';
 		const blockStyles = { ...props.style };
 
-		if ( animationStyle !== undefined && animationStyle !== 'none' ) {
-			blockClass =
-				animationPosition !== undefined && animationPosition
-					? `${ blockClass } tribe-animation-style-${ animationStyle } is-animated-on-scroll-full`
-					: `${ blockClass } tribe-animation-style-${ animationStyle } is-animated-on-scroll`;
+		if ( animationType !== undefined && animationType !== 'none' ) {
+			// set block class for animation direction & animation position, if it's not set to the default
+			blockClass = `${
+				blockClass !== '' ? blockClass + ' ' : ''
+			}is-animated-on-scroll-${ animationPosition } tribe-animation-type-${ animationType } tribe-animation-direction-${ animationDirection }`;
 
-			if ( animationSpeed !== undefined && animationSpeed ) {
-				blockStyles[ '--tribe-animation-speed' ] = animationSpeed;
+			// set block styles for animation duration
+			if ( animationDuration !== undefined && animationDuration ) {
+				blockStyles[ '--tribe-animation-speed' ] = animationDuration;
+
+				blockStyles[ '--tribe-animation-offset' ] =
+					state.offsetDistance[ animationDuration ];
 			}
 
+			// set block styles for animation delay
 			if ( animationDelay !== undefined && animationDelay ) {
 				blockStyles[ '--tribe-animation-delay' ] = animationDelay;
 			}
 
+			// set block class for disabling animation delays on mobile
+			if (
+				animationMobileDisableDelay !== undefined &&
+				animationMobileDisableDelay
+			) {
+				blockClass = `${ blockClass } tribe-animation-mobile-disable-delay`;
+			}
+
+			// set block styles for animation easing
 			if ( animationEasing !== undefined && animationEasing ) {
 				blockStyles[ '--tribe-animation-easing' ] = animationEasing;
 			}
 
+			// set block class for triggering animation multiple times
 			if ( animationTrigger !== undefined && animationTrigger ) {
 				blockClass = `${ blockClass } tribe-animate-multiple`;
 			}
@@ -185,92 +231,146 @@ const animationControls = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={ false }
 						>
 							<SelectControl
-								label={ __( 'Animation Style', 'tribe' ) }
-								value={ animationStyle ?? 'none' }
+								label={ __( 'Animation Type', 'tribe' ) }
+								value={ animationType }
 								help={ __(
-									'Animation style is the type of animation you want to display.',
+									'Animation Type is the type of animation that should run.',
 									'tribe'
 								) }
 								onChange={ ( newValue ) => {
 									setAttributes( {
-										animationStyle: newValue,
+										animationType: newValue,
 									} );
 								} }
-								options={ state.animations }
+								options={ state.type }
 							/>
-							<SelectControl
-								label={ __( 'Animation Speed', 'tribe' ) }
-								value={ animationSpeed ?? '0.3s' }
-								help={ __(
-									'Animation speed is the speed at which the animation should run.'
-								) }
-								onChange={ ( newValue ) =>
-									setAttributes( {
-										animationSpeed: newValue,
-									} )
-								}
-								options={ state.speed }
-							/>
-							<SelectControl
-								label={ __( 'Animation Delay', 'tribe' ) }
-								value={ animationDelay ?? '0s' }
-								help={ __(
-									'Animation delay adds extra time before the animation starts.',
-									'tribe'
-								) }
-								onChange={ ( newValue ) =>
-									setAttributes( {
-										animationDelay: newValue,
-									} )
-								}
-								options={ state.delays }
-							/>
-							<SelectControl
-								label={ __( 'Animation Easing', 'tribe' ) }
-								value={ animationEasing ?? 'ease' }
-								help={ __(
-									'Animation easing determines what easing function the animation should use.',
-									'tribe'
-								) }
-								onChange={ ( newValue ) =>
-									setAttributes( {
-										animationEasing: newValue,
-									} )
-								}
-								options={ state.easings }
-							/>
-							<ToggleControl
-								label={ __(
-									'Animation should trigger every time the element is in the viewport',
-									'tribe'
-								) }
-								help={ __(
-									'Default functionality is to trigger the animation once.',
-									'tribe'
-								) }
-								checked={ !! animationTrigger }
-								onChange={ ( newValue ) =>
-									setAttributes( {
-										animationTrigger: newValue,
-									} )
-								}
-							/>
-							<ToggleControl
-								label={ __(
-									'Animation should trigger when the element is completely in the viewport',
-									'tribe'
-								) }
-								help={ __(
-									'Default functionality is to trigger the animation when 25% of it is in the viewport.',
-									'tribe'
-								) }
-								checked={ !! animationPosition }
-								onChange={ ( newValue ) =>
-									setAttributes( {
-										animationPosition: newValue,
-									} )
-								}
-							/>
+							{ animationType === undefined ||
+								( animationType !== 'none' && (
+									<>
+										<SelectControl
+											label={ __(
+												'Animation Direction',
+												'tribe'
+											) }
+											value={ animationDirection }
+											help={ __(
+												'Animation direction is the direction you want the animation to run in.',
+												'tribe'
+											) }
+											onChange={ ( newValue ) => {
+												setAttributes( {
+													animationDirection:
+														newValue,
+												} );
+											} }
+											options={
+												state.direction[ animationType ]
+											}
+										/>
+										<SelectControl
+											label={ __(
+												'Animation Duration',
+												'tribe'
+											) }
+											value={ animationDuration }
+											help={ __(
+												'Animation duration is the speed at which the animation should run.'
+											) }
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationDuration: newValue,
+												} )
+											}
+											options={ state.duration }
+										/>
+										<SelectControl
+											label={ __(
+												'Animation Delay',
+												'tribe'
+											) }
+											value={ animationDelay }
+											help={ __(
+												'Animation delay adds extra time before the animation starts.',
+												'tribe'
+											) }
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationDelay: newValue,
+												} )
+											}
+											options={ state.delay }
+										/>
+										<ToggleControl
+											label={ __(
+												'Animation delays should be disabled on mobile.',
+												'tribe'
+											) }
+											help={ __(
+												"Default functionality will not disable animation delays on mobile. This feature is useful for animations that are delayed on desktop, but shouldn't be on mobile.",
+												'tribe'
+											) }
+											checked={
+												!! animationMobileDisableDelay
+											}
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationMobileDisableDelay:
+														newValue,
+												} )
+											}
+										/>
+										<SelectControl
+											label={ __(
+												'Animation Easing',
+												'tribe'
+											) }
+											value={ animationEasing }
+											help={ __(
+												'Animation easing determines what easing function the animation should use.',
+												'tribe'
+											) }
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationEasing: newValue,
+												} )
+											}
+											options={ state.easing }
+										/>
+										<ToggleControl
+											label={ __(
+												'Animation should trigger every time the element is in the viewport',
+												'tribe'
+											) }
+											help={ __(
+												'Default functionality is to trigger the animation once.',
+												'tribe'
+											) }
+											checked={ !! animationTrigger }
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationTrigger: newValue,
+												} )
+											}
+										/>
+										<SelectControl
+											label={ __(
+												'Animation Trigger Position',
+												'tribe'
+											) }
+											value={ animationPosition }
+											help={ __(
+												'Animation trigger position determines how much of the element should be in the viewport before the animation triggers.',
+												'tribe'
+											) }
+											onChange={ ( newValue ) =>
+												setAttributes( {
+													animationPosition: newValue,
+												} )
+											}
+											options={ state.position }
+										/>
+									</>
+								) ) }
 						</PanelBody>
 					</InspectorControls>
 				) }
@@ -303,23 +403,37 @@ const addAnimationAttributes = ( settings, name ) => {
 	if ( settings?.attributes !== undefined ) {
 		settings.attributes = {
 			...settings.attributes,
-			animationStyle: {
+			animationType: {
 				type: 'string',
+				default: 'none',
 			},
-			animationSpeed: {
+			animationDirection: {
 				type: 'string',
+				default: 'bottom',
+			},
+			animationDuration: {
+				type: 'string',
+				default: '0.6s',
 			},
 			animationDelay: {
 				type: 'string',
+				default: '0s',
+			},
+			animationMobileDisableDelay: {
+				type: 'boolean',
+				default: false,
 			},
 			animationEasing: {
 				type: 'string',
+				default: 'cubic-bezier(0.390, 0.575, 0.565, 1.000)',
 			},
 			animationTrigger: {
 				type: 'boolean',
+				default: false,
 			},
 			animationPosition: {
-				type: 'boolean',
+				type: 'string',
+				default: '25',
 			},
 		};
 	}
@@ -361,35 +475,79 @@ const registerFilters = () => {
  * @todo do we need to handle translations if pulling from theme.json?
  */
 const initializeSettings = () => {
-	state.animations = themeJson?.settings?.animations ?? [
+	state.type = themeJson?.settings?.animationType ?? [
 		{ label: __( 'None', 'tribe' ), value: 'none' },
 		{ label: __( 'Fade In', 'tribe' ), value: 'fade-in' },
-		{ label: __( 'Fade In Up', 'tribe' ), value: 'fade-in-up' },
-		{ label: __( 'Fade In Down', 'tribe' ), value: 'fade-in-down' },
-		{ label: __( 'Fade In Right', 'tribe' ), value: 'fade-in-right' },
-		{ label: __( 'Fade In Left', 'tribe' ), value: 'fade-in-left' },
 	];
-	state.speeds = themeJson?.settings?.animationSpeeds ?? [
-		{ label: __( 'Extra Slow', 'tribe' ), value: '0.7s' },
-		{ label: __( 'Slow', 'tribe' ), value: '0.5s' },
-		{ label: __( 'Normal', 'tribe' ), value: '0.3s' },
-		{ label: __( 'Fast', 'tribe' ), value: '0.2s' },
-		{ label: __( 'Extra Fast', 'tribe' ), value: '0.1s' },
+	// direction is an object with keys for each animation type
+	state.direction = themeJson?.settings?.animationDirection ?? {
+		'fade-in': [
+			{ label: __( 'Bottom', 'tribe' ), value: 'bottom' },
+			{ label: __( 'Right', 'tribe' ), value: 'right' },
+			{ label: __( 'Top Right', 'tribe' ), value: 'top-right' },
+			{ label: __( 'Bottom Right', 'tribe' ), value: 'bottom-right' },
+			{ label: __( 'Left', 'tribe' ), value: 'left' },
+			{ label: __( 'Top Left', 'tribe' ), value: 'top-left' },
+			{ label: __( 'Bottom Left', 'tribe' ), value: 'bottom-left' },
+			{ label: __( 'Forward', 'tribe' ), value: 'forward' },
+			{ label: __( 'Back', 'tribe' ), value: 'back' },
+			{ label: __( 'Top', 'tribe' ), value: 'top' },
+			{ label: __( 'Simple', 'tribe' ), value: 'simple' },
+		],
+	};
+	state.duration = themeJson?.settings?.animationDuration ?? [
+		{ label: __( '300ms', 'tribe' ), value: '0.3s' },
+		{ label: __( '600ms', 'tribe' ), value: '0.6s' },
+		{ label: __( '900ms', 'tribe' ), value: '0.9s' },
+		{ label: __( '1200ms', 'tribe' ), value: '1.2s' },
+		{ label: __( '1400ms', 'tribe' ), value: '1.4s' },
 	];
-	state.delays = themeJson?.settings?.animationDelays ?? [
-		{ label: __( 'None', 'tribe' ), value: '0s' },
-		{ label: __( 'Extra Short', 'tribe' ), value: '0.1s' },
-		{ label: __( 'Short', 'tribe' ), value: '0.2s' },
-		{ label: __( 'Medium', 'tribe' ), value: '0.3s' },
-		{ label: __( 'Long', 'tribe' ), value: '0.5s' },
-		{ label: __( 'Extra Long', 'tribe' ), value: '0.7s' },
+	state.offsetDistance = themeJson?.settings?.offsetDistance ?? {
+		'0.3s': '20px',
+		'0.6s': '50px',
+		'0.9s': '90px',
+		'1.2s': '160px',
+		'1.4s': '280px',
+	};
+	state.delay = themeJson?.settings?.animationDelay ?? [
+		{ label: __( '0', 'tribe' ), value: '0s' },
+		{ label: __( '300ms', 'tribe' ), value: '0.3s' },
+		{ label: __( '600ms', 'tribe' ), value: '0.6s' },
+		{ label: __( '900ms', 'tribe' ), value: '0.9s' },
+		{ label: __( '1200ms', 'tribe' ), value: '1.2s' },
+		{ label: __( '1500ms', 'tribe' ), value: '1.5s' },
 	];
-	state.easings = themeJson?.settings?.animationEasings ?? [
-		{ label: __( 'Ease', 'tribe' ), value: 'ease' },
-		{ label: __( 'Ease In', 'tribe' ), value: 'ease-in' },
-		{ label: __( 'Ease Out', 'tribe' ), value: 'ease-out' },
-		{ label: __( 'Ease In Out', 'tribe' ), value: 'ease-in-out' },
-		{ label: __( 'Linear', 'tribe' ), value: 'linear' },
+	state.easing = themeJson?.settings?.animationEasing ?? [
+		{
+			label: __( 'Ease Out Sine', 'tribe' ),
+			value: 'cubic-bezier(0.390, 0.575, 0.565, 1.000)',
+		},
+		{
+			label: __( 'Ease In Sine', 'tribe' ),
+			value: 'cubic-bezier(0.470, 0.000, 0.745, 0.715)',
+		},
+		{
+			label: __( 'Ease In Out Sine', 'tribe' ),
+			value: 'cubic-bezier(0.445, 0.050, 0.550, 0.950)',
+		},
+		{
+			label: __( 'Ease Out Quad', 'tribe' ),
+			value: 'cubic-bezier(0.250, 0.460, 0.450, 0.940)',
+		},
+		{
+			label: __( 'Ease In Quad', 'tribe' ),
+			value: 'cubic-bezier(0.550, 0.085, 0.680, 0.530)',
+		},
+		{
+			label: __( 'Ease In Out Quad', 'tribe' ),
+			value: 'cubic-bezier(0.455, 0.030, 0.515, 0.955)',
+		},
+	];
+	state.position = themeJson?.settings?.animationPosition ?? [
+		{ label: __( '25%', 'tribe' ), value: '25' },
+		{ label: __( '50%', 'tribe' ), value: '50' },
+		{ label: __( '75%', 'tribe' ), value: '75' },
+		{ label: __( '100%', 'tribe' ), value: '100' },
 	];
 	state.includes = themeJson.settings.animationIncludes ?? [];
 	state.excludes = themeJson.settings.animationExcludes ?? [];

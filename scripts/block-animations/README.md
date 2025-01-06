@@ -1,8 +1,8 @@
 # Block Animations
 
-Status: Alpha
-Version: 0.1-alpha
-Last Updated: 2023-08
+Status: Stable
+Version: 1.0
+Last Updated: 2025-01
 Component Created By: Geoff Dusome
 
 ## What does this component do?
@@ -21,40 +21,64 @@ The block animations script is used to add developer defined animations to block
 
 These settings can be overwritten in `theme.json`. If these values don't exist in `theme.json`, the script provides defaults.
 
-#### `animation`
+#### `animationType`
 
 Used to define the names of the animations the developer would like to include in the project.
 
 ```
-"animation": [
-	{ "label": "Test", "value": "test" },
-	{ "label": "Test 2", "value": "test-2" }
+"animationType": [
+	{ "label": "None", "value": "none" },
+	{ "label": "Fade In", "value": "fade-in" }
 ]
 ```
 
-#### `animationSpeeds`
+#### `animationDirection`
 
-Used to define the values of how fast animations should run.
+Used to define the directions that the animations should run in. This property is an object instead of an array, so that we can pull directions based on the animation type. 
 
 ```
-"animationSpeeds": [
-	{ "label": "Fast", "value": "0.2s" },
-	{ "label": "Slow", "value": "0.8s" }
-],
+"animationDirection": {
+ 	"fade-in": [
+ 		{ "label": "Top", "value": "top" },
+		{ "label": "Bottom", "value": "bottom" }
+	]
+}
 ```
 
-#### `animationDelays`
+#### `animationDuration`
+
+Used to define the values of how fast animations should run. Note that updating the duration list here would also affect the predefiend `offsetDistance` values. These `offsetDistance` values should be updated to match the durations listed here.
+
+```
+"animationDuration": [
+	{ "label": "200ms", "value": "0.2s" },
+	{ "label": "800ms", "value": "0.8s" }
+]
+```
+
+#### `offsetDistance`
+
+Directly related to the `animationDuration` values, these values determine how far elements should move based on how long the animation runs for. This help keeps animations smooth. 
+
+```
+"offsetDistance": {
+	'0.2s': '20px',
+	'0.8s': '50px',
+}
+```
+
+#### `animationDelay`
 
 Used to define the value of how long animations should be delayed before they run.
 
 ```
-"animationDelays": [
-	{ "label": "Short", "value": "0.2s" },
-	{ "label": "Long", "value": "0.8s" }
+"animationDelay": [
+	{ "label": "0", "value": "0s" },
+	{ "label": "200ms", "value": "0.2s" }
 ],
 ```
 
-#### `animationEasings`
+#### `animationEasing`
 
 Used to define the easings available to editors when defining animations on blocks.
 
@@ -93,15 +117,22 @@ While not available for update in `theme.json`, this is an attribute set on ever
 
 #### `animationPosition`
 
-While not available for update in `theme.json`, this is an attribute set on every block that has animation properties set to define if animations on the block should run when the element is 25% in the viewport, or if animations should run with 100% of the element is in view. This is a good option to use if you're using animations on a smaller element. Alternatively, you could use the 25% option (default) with a small animation delay.
+Animation position determines how much of an element should be within the viewport before the animation runs. While the values are available to be updated in `theme.json`, these values would also need to be updated in `animate-on-scroll.js` to match the values added in `theme.json` or updated within the `block-animation.js` script itself.
+
+```
+"animationPosition": [
+ 	{ "label": "25%", "value": "25" },
+ 	{ "label": "50%", "value": "50" },
+],
+```
 
 ### `animate-on-scroll.js`
 
 An additional script that pairs as the front-end handler for the block animations script. This script works on a class based system with `IntersectionObserver` where, if the element that has an animation defined has scrolled into view, that element will get an additional class the developer can use to apply animations to the block.
 
-The block animation script defines an additional class on blocks with animation for the "style" of animation (`tribe-animation-style-{style}`), which uses the `slug` property of the `animation` array's object.
+The block animation script defines an additional class on blocks with animation for the "style" of animation (`is-animation-on-scroll-{style}`), which uses the `slug` property of the `animation` array's object.
 
-The block animation script defines three style properties on block with animation for the animation speed (`--tribe-animation-speed`), delay (`--tribe-animation-delay`), and easing (`--tribe-animation-easing`). You should be able to use these CSS custom properties within your animation styles to modify the default animation values.
+The block animation script defines four style properties on block with animation for the animation speed (`--tribe-animation-speed`), delay (`--tribe-animation-delay`), easing (`--tribe-animation-easing`), and animation offset (`--tribe-animation-offset`), which is set manually by the script based on the distance selected. You should be able to use these CSS custom properties within your animation styles to modify the default animation values.
 
 In this directory, there's a `animation.pcss` style file also included. This can be used as base for creating animations using these scripts.
 
