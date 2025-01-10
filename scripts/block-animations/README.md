@@ -1,7 +1,7 @@
 # Block Animations
 
 Status: Stable
-Version: 1.0
+Version: 1.1
 Last Updated: 2025-01
 Component Created By: Geoff Dusome
 
@@ -13,9 +13,9 @@ The block animations script is used to add developer defined animations to block
 
 ### Moose Implementation 
 
-`block-animations.js` => `themes/core/assets/js/editor`
-`animate-on-scroll.js` => `themes/core/assets/js/theme`
-`animation.pcss` => `themes/core/assets/pcss/global`
+`block-animations/` → `themes/core/assets/js/editor` → import into editor `ready.js`
+`animate-on-scroll.js` → `themes/core/assets/js/theme` → import into theme `ready.js`
+`animation.pcss` → `themes/core/assets/pcss/global` → import into `theme.pcss`
 
 ### `theme.json` Settings
 
