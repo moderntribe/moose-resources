@@ -40,6 +40,22 @@ const attachObservers = () => {
 		el.aosElements.forEach( ( element ) => observer.observe( element ) );
 	}
 
+	if ( el.aos50Elements.length ) {
+		const observer = new window.IntersectionObserver( handleIntersection, {
+			threshold: 0.5,
+		} );
+
+		el.aos50Elements.forEach( ( element ) => observer.observe( element ) );
+	}
+
+	if ( el.aos75Elements.length ) {
+		const observer = new window.IntersectionObserver( handleIntersection, {
+			threshold: 0.75,
+		} );
+
+		el.aos75Elements.forEach( ( element ) => observer.observe( element ) );
+	}
+
 	if ( el.aosFullElements.length ) {
 		const observer = new window.IntersectionObserver( handleIntersection, {
 			threshold: 1,
@@ -57,12 +73,24 @@ const attachObservers = () => {
  * @description Cache elements for this module
  */
 const cacheElements = () => {
+	/**
+	 * Note that the below selectors would need to change if the values of
+	 * the animationPosition values change in theme.json (or the
+	 * block-animations.js file).
+	 */
+
 	// grabs elements that should animate when the element is 25% in view
-	el.aosElements = document.querySelectorAll( '.is-animated-on-scroll' );
+	el.aosElements = document.querySelectorAll( '.is-animated-on-scroll-25' );
+
+	// grabs elements that should animate when 50% of the element is in view
+	el.aos50Elements = document.querySelectorAll( '.is-animated-on-scroll-50' );
+
+	// grabs elements that should animate when 75% of the element is in view
+	el.aos75Elements = document.querySelectorAll( '.is-animated-on-scroll-75' );
 
 	// grabs elements that should animate when the entire element is in view
 	el.aosFullElements = document.querySelectorAll(
-		'.is-animated-on-scroll-full'
+		'.is-animated-on-scroll-100'
 	);
 };
 
