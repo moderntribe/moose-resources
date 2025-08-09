@@ -22,6 +22,35 @@ All versions support:
 - Accessible labels via custom input
 - Live preview of selected icon and styles
 
+Developers can choose the appropriate version based on project needs. The MS Fabric version is ideal for Microsoft-branded environments.
+
+
+### 🛠️ Installation Instructions
+
+#### General setup
+
+1. Copy the block directories you want to use to `themes/core/blocks/tribe/`
+
+Includes:
+
+- `icon-picker`
+- `icon-picker-font-awesome`
+- `icon-picker-ms-fabric`
+
+2. Register the blocks in `plugins/core/src/Blocks/Blocks_Definer.php`:
+
+```php
+self::TYPES => DI\add( [
+  'tribe/icon-picker',
+  'tribe/icon-picker-font-awesome',
+  'tribe/icon-picker-ms-fabric',
+] )
+```
+
+3. (Optional) In `edit.js`, switch between:
+- Option 1: Use `theme.json` color palette (default)
+- Option 2: Use a custom color array for icons/background
+
 ---
 
 ### IconPicker (Custom Icons)
@@ -62,11 +91,6 @@ This will:
 2. Run `npm install` to install the dependency
 3. Copy the block directory into `themes/core/blocks/tribe/`.
 4. Add `tribe/icon-picker-font-awesome` to the `self::TYPES` array in `plugins/core/src/Blocks/Blocks_Definer.php`.
-
-### IconPicker (MS Fabric)
-
-1. Copy the block directory into `themes/core/blocks/tribe/`.
-2. Add `tribe/icon-picker-ms-fabric` to the `self::TYPES` array in `plugins/core/src/Blocks/Blocks_Definer.php`.
 
 ### Block Usage
 
