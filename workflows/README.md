@@ -10,3 +10,5 @@ A collection of deployment workflows using GitHub Actions.
 ## Workflow Collection
 
 - [WP Engine](./wpengine/README.md)
+- [Lighthouse](./lighthouse/README.md)
+- [PHP Tests](./phptests/README.md)
