@@ -1,5 +1,8 @@
 # SLIC PHP Unit Tests GitHub Actions
 
+Adds [Slic](https://github.com/stellarwp/slic) unit testing to your project.
+
+## Setup Instructions
 1. Copy & Paste the `php-tests.yml` file into your projects `.github/workflows` directory to take advantage of this action.
 2. Update your project's `code-quality.yml` file to include the PHP Tests workflow as needed. Here's an example of 
    how to include it:
