@@ -9,4 +9,4 @@ A collection of deployment workflows using GitHub Actions.
 
 ## Workflow Collection
 
-- [WPE](./WPE/README.md)
+- [WP Engine](./wpengine/README.md)
