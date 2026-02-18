@@ -1,4 +1,5 @@
-name: WPE Deploy Dev
+name: Deploy to dev
+run-name: Deploy `${{ github.head_ref || github.ref_name }}` to `${{ env.WPE_ENV }}`
 
 on:
   workflow_dispatch:

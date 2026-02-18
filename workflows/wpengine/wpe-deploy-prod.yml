@@ -1,4 +1,5 @@
-name: Deploy Production
+name: Deploy to production
+run-name: Deploy `${{ github.head_ref || github.ref_name }}` to production
 
 on:
 #  push:

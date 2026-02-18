@@ -1,4 +1,5 @@
-name: Deploy Staging
+name: Deploy to staging
+run-name: Deploy `${{ github.head_ref || github.ref_name }}` to `${{ env.WPE_ENV }}`
 
 on:
 #  push:
