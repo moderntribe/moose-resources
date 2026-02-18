@@ -1,6 +1,10 @@
 name: Deploy to dev
 run-name: Deploy `${{ github.head_ref || github.ref_name }}` to `${{ env.WPE_ENV }}`
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
 

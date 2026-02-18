@@ -1,6 +1,10 @@
 name: Deploy to production
 run-name: Deploy `${{ github.head_ref || github.ref_name }}` to production
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 on:
 #  push:
 #    branches:
