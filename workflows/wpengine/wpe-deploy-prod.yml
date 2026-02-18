@@ -46,7 +46,9 @@ jobs:
       - name: Create local config
         run: |
           php -r "file_exists( 'local-config.php' ) || copy( 'local-config-sample.php', 'local-config.php' );"
-          echo "define( 'WP_ENVIRONMENT_TYPE', ${{ env.ENVIRONMENT }} );" >> local-config.php
+          FILE="local-config.php"
+          (head -n 1 "$FILE" && printf '// Added by GitHub Actions CI\ndefine( "WP_ENVIRONMENT_TYPE", "%s" );\n\n' "${{ env.ENVIRONMENT }}" && tail -n +2 "$FILE") > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+          echo "First 8 lines after update:" && head -n 8 "$FILE"
 
       ##########
       ### DEPLOY: Use the WPE git deploy hook method. TLDR; rsync our repo on their repo and push.
