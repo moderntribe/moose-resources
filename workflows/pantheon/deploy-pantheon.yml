@@ -27,41 +27,13 @@ jobs:
       - name: Check out build branch
         uses: actions/checkout@v6
 
-      - name: 'Configure PHP environment'
-        uses: shivammathur/setup-php@v2
+      # Composer install
+      - name: 'Composer install'
+        uses: ./.github/actions/composer-install
         with:
-          php-version: '8.4'
-
-      - name: 'Get composer cache directory'
-        id: composer-cache
-        shell: bash
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: 'Cache composer dependencies'
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: 'Install 1Password CLI'
-        uses: 1password/install-cli-action@v2
-
-      - name: 'Create auth.json via 1Password CLI'
-        shell: bash
-        env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           OP_VAULT: ${{ secrets.OP_VAULT }}
           OP_ITEM: ${{ secrets.OP_ITEM }}
-        run: op inject -i auth.template.json -o auth.json
-
-      - name: 'Install Composer'
-        shell: bash
-        run: |
-          composer install --optimize-autoloader --no-dev
-          rm auth.json
 
       # Set up node version
       - name: Set up node
