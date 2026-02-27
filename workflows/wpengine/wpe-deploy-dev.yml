@@ -21,6 +21,8 @@ jobs:
       # Get Build Repository
       - name: Check out build branch
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       # Composer install
       - name: 'Composer install'
@@ -34,7 +36,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v6
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: "./.nvmrc"
           cache: 'npm'
           check-latest: true
 
