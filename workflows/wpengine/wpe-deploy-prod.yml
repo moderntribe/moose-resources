@@ -40,12 +40,15 @@ jobs:
           cache: 'npm'
           check-latest: true
 
-      # NPM Install and Build
-      - name: NPM Install
-        run: npm install
+      # NPM install all dependencies and build assets
+      - name: NPM install and build assets
+        run: |
+          npm install
+          npm run dist
 
-      - name: NPM Build
-        run: npm run dist
+      # NPM install production dependencies
+      - name: NPM install production dependencies
+        run: npm install --omit=dev --omit=optional
 
       # Create local config for environment based settings
       - name: Create local config
