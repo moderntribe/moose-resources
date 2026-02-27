@@ -1,5 +1,5 @@
 name: Deploy to Pantheon
-run-name: 'Deploy to Pantheon `${{ inputs.target_env }}`: `${{ github.head_ref || github.ref_name }}`'
+run-name: 'Deploy `${{ github.head_ref || github.ref_name }}` to `${{ inputs.target_env }}`'
 
 concurrency:
   group: ${{ github.workflow }}-${{ inputs.target_env }}
