@@ -6,9 +6,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-#  push:
-#    branches:
-#      - server/staging
+  workflow_dispatch:
 
 jobs:
   deploy:
