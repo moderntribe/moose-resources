@@ -54,40 +54,7 @@ jobs:
         run: npm install --omit=dev --omit=optional
 
       - name: Cleanup
-        run: |
-          rm -rf \
-            .deploy \
-            .github/lighthouse \
-            .github/workflows \
-            .github/PULL_REQUEST_TEMPLATE.md \
-            .lefthook \
-            .vscode \
-            dev \
-            docs \
-            tests \
-            .editorconfig \
-            .env.testing.slic \
-            .eslintrc.json \
-            .gitignore \
-            .lando.yml \
-            .nvmrc \
-            .prettierignore \
-            .stylelintrc.json \
-            auth.template.json \
-            browsersync.config.js \
-            codeception.dist.yml \
-            composer.json \
-            composer.lock \
-            lefthook.yml \
-            local-config-sample.json \
-            local-config-sample.php \
-            package-lock.json \
-            package.json \
-            phpcs.xml.dist \
-            phpstan.neon.dist \
-            postcss.config.js \
-            Procfile \
-            webpack.config.js
+        run: cat .deploy/deploy-exclude.txt | xargs rm -rf
 
       ##########
       ### DEPLOY: Use the Pantheon GitHub Action.
