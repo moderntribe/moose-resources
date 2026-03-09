@@ -1,0 +1,80 @@
+name: Deploy to Pantheon
+run-name: 'Deploy `${{ github.head_ref || github.ref_name }}` to `${{ inputs.target_env }}`'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.target_env }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_env:
+        default: 'dev'
+        description: 'Target environment [dev]'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      deployments: write
+      contents: read
+
+    steps:
+      # Get Build Repository
+      - name: Check out build branch
+        uses: actions/checkout@v6
+
+      # Composer install
+      - name: 'Composer install'
+        uses: ./.github/actions/composer-install
+        with:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          OP_VAULT: ${{ secrets.OP_VAULT }}
+          OP_ITEM: ${{ secrets.OP_ITEM }}
+
+      # Set up node version
+      - name: Set up node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+          cache: 'npm'
+          check-latest: true
+
+      # NPM install all dependencies and build assets
+      - name: NPM install and build assets
+        run: |
+          npm install
+          npm run dist
+
+      # NPM install production dependencies
+      - name: NPM install production dependencies
+        run: npm install --omit=dev --omit=optional
+
+      - name: Cleanup
+        run: |
+          # Add files in .deploy/deploy-exclude.txt to .gitignore before deploy
+          # Skip comments/empty lines, append each pattern to .gitignore
+          echo "" >> .gitignore
+          echo "# Temporary excludes for Pantheon push (CI only - not committed to GitHub)" >> .gitignore
+          grep -v '^#' .deploy/deploy-exclude.txt | grep -v '^$' >> .gitignore
+
+          # Optional: Show what was added (for debugging/verbose output)
+          echo "Appended the following to .gitignore:"
+          tail -n +$(($(wc -l < .gitignore) - $(wc -l < .deploy/deploy-exclude.txt | awk '{print $1}') + 2)) .gitignore
+
+          # No git add/commit here — the push-to-pantheon action will handle committing/pushing
+          # If needed, you can force-add .gitignore if the action requires it, but usually not
+
+      ##########
+      ### DEPLOY: Use the Pantheon GitHub Action.
+
+      - name: Deploy to Pantheon
+        uses: pantheon-systems/push-to-pantheon@0.9.0
+        with:
+          ssh_key: ${{ secrets.PANTHEON_SSH_KEY }}
+          machine_token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+          site: ${{ vars.PANTHEON_SITE_MACHINE_NAME }}
+          target_env: ${{ inputs.target_env }}

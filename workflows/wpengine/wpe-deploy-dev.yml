@@ -1,4 +1,9 @@
-name: WPE Deploy Dev
+name: Deploy to dev
+run-name: Deploy `${{ github.head_ref || github.ref_name }}` to `${{ env.WPE_ENV }}`
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 on:
   workflow_dispatch:
@@ -15,7 +20,9 @@ jobs:
     steps:
       # Get Build Repository
       - name: Check out build branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       # Composer install
       - name: 'Composer install'
@@ -27,24 +34,21 @@ jobs:
 
       # Set up node version
       - name: Set up node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version-file: ".nvmrc"
+          node-version-file: "./.nvmrc"
           cache: 'npm'
           check-latest: true
 
-      # NPM Install and Build
-      - name: NPM Install
-        run: npm install
-
-      - name: NPM Build
-        run: npm run dist
-
-      # Create local config for environment based settings
-      - name: Create local config
+      # NPM install all dependencies and build assets
+      - name: NPM install and build assets
         run: |
-          php -r "file_exists( 'local-config.php' ) || copy( 'local-config-sample.php', 'local-config.php' );"
-          echo "define( 'WP_ENVIRONMENT_TYPE', ${{ env.ENVIRONMENT }} );" >> local-config.php
+          npm install
+          npm run dist
+
+      # NPM install production dependencies
+      - name: NPM install production dependencies
+        run: npm install --omit=dev --omit=optional
 
       ##########
       ### DEPLOY: Use the WPE git deploy hook method. TLDR; rsync our repo on their repo and push.
